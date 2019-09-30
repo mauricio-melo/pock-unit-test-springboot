@@ -83,7 +83,7 @@ public class PeopleTest {
 
 	@Test
 	public void removePerson() throws Exception {
-		mock.perform(delete("/people" + "/{id}", 2L))
+		this.mock.perform(delete("/people" + "/{id}", 2L))
 				.andExpect(status().is(200));
 
 		verify(this.peopleService).remove(eq(2L));
@@ -96,12 +96,12 @@ public class PeopleTest {
 				.age(22)
 				.build();
 		
-		when(peopleService.create(any(Person.class))).thenReturn(person);
+		when(this.peopleService.create(any(Person.class))).thenReturn(person);
 		
 		final ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 		final String json = ow.writeValueAsString(person);
 		
-		mock.perform(post("/people")
+		this.mock.perform(post("/people")
 				.contentType(MediaType.APPLICATION_JSON_UTF8)
 				.accept(MediaType.APPLICATION_JSON_UTF8)
 				.content(json))
