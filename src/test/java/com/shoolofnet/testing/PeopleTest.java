@@ -62,20 +62,23 @@ public class PeopleTest {
 				.name("Mauricio")
 				.age(22)
 				.build();
-		
+
+		//mocka a chamada e o retorno do metodo create do service
 		when(this.peopleService.create(any(Person.class))).thenReturn(person);
-		
+
+		//converte para string o request
 		final ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 		final String mockPersonJSON = ow.writeValueAsString(person);
-		
+
+		//faz a chamada ao controller
 		this.mock.perform(post("/people")
 					.contentType(MediaType.APPLICATION_JSON_UTF8)
 					.accept(MediaType.APPLICATION_JSON_UTF8)
-					.content(mockPersonJSON))
-		.andExpect(status().isOk())
-		.andExpect(content().json(mockPersonJSON));
+					.content(mockPersonJSON)) //body da requisição
+		.andExpect(status().isOk()) //espera codigo 200
+		.andExpect(content().json(mockPersonJSON)); //confere retorno
 
-		verify(this.peopleService).create(any(Person.class));
+		verify(this.peopleService).create(any(Person.class)); //verifica se o metodo foi chamado ao menos uma vez
 	}
 
 	@Test
